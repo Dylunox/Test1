@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إتمام الشراء - tkchop.om</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(to bottom, #4B0082, #1C2526);
+            color: #FFFFFF;
+            direction: rtl;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-top: 5px solid #6A0DAD;
+            color: #1a2b3c;
+            animation: popIn 0.5s ease-in-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        h1 {
+            text-align: center;
+            color: #1a2b3c;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .order-summary {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fafafa;
+            margin-bottom: 30px;
+        }
+        .order-summary h2 {
+            font-size: 24px;
+            color: #1a2b3c;
+            margin: 0 0 15px;
+            font-weight: 700;
+        }
+        #order-details {
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        #order-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 16px;
+            color: #1a2b3c;
+        }
+        #order-table th, #order-table td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        #order-table th {
+            background: #f5f6f5;
+            font-weight: 700;
+        }
+        #order-table td img {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+        .summary-details {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #1a2b3c;
+            background: #f5f6f5;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .summary-details p {
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .summary-details span {
+            color: #FF69B4;
+            font-weight: 600;
+        }
+        .checkout-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .checkout-form h2 {
+            font-size: 24px;
+            color: #1a2b3c;
+            margin: 0 0 15px;
+            font-weight: 700;
+        }
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .form-group input, .form-group textarea {
+            display: block;
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid #6A0DAD;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-group textarea {
+            height: 100px;
+            resize: none;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #5A0A9A;
+            box-shadow: 0 0 5px rgba(90, 10, 154, 0.3);
+            outline: none;
+        }
+        .form-group::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background-size: cover;
+        }
+        .form-group.name::before {
+            background: url('user-icon.png') no-repeat center;
+        }
+        .form-group.email::before {
+            background: url('email-icon.png') no-repeat center;
+        }
+        .form-group.phone::before {
+            background: url('phone-icon.png') no-repeat center;
+        }
+        .form-group.address::before {
+            background: url('address-icon.png') no-repeat center;
+        }
+        .payment-methods, .delivery-methods {
+            margin: 20px 0;
+        }
+        .payment-methods h3, .delivery-methods h3 {
+            font-size: 18px;
+            color: #1a2b3c;
+            margin-bottom: 10px;
+        }
+        .payment-methods label, .delivery-methods label {
+            display: block;
+            margin: 10px 0;
+            font-size: 16px;
+            color: #1a2b3c;
+        }
+        .payment-methods input[type="radio"], .delivery-methods input[type="radio"] {
+            margin-left: 10px;
+        }
+        #terms {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+        }
+        #terms label {
+            margin-right: 10px;
+            font-size: 14px;
+            color: #546e7a;
+        }
+        button {
+            background: #6A0DAD;
+            color: #FFFFFF;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+            animation: pulse 2s infinite;
+        }
+        button:hover {
+            background: #5A0A9A;
+            box-shadow: 0 0 10px rgba(106, 13, 173, 0.7);
+            transform: scale(1.02);
+        }
+        button:disabled {
+            background: #90a4ae;
+            cursor: not-allowed;
+        }
+        .back-btn {
+            background: #546e7a;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background: #455a64;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>إتمام الشراء</h1>
+        <div class="order-summary">
+            <h2>ملخص الطلب</h2>
+            <div id="order-details">
+                <table id="order-table">
+                    <thead>
+                        <tr>
+                            <th>المنتج</th>
+                            <th>السعر</th>
+                            <th>الكمية</th>
+                            <th>الإجمالي</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-table-body"></tbody>
+                </table>
+            </div>
+            <div class="summary-details">
+                <p>المجموع الفرعي: <span id="subtotal">0</span> $</p>
+                <p>الضرائب (5%): <span id="tax">0</span> $</p>
+                <p>تكلفة الشحن: <span id="shipping">0</span> $</p>
+                <p>السعر الإجمالي: <span id="total-amount">0</span> $</p>
+            </div>
+        </div>
+        <div class="checkout-form">
+            <h2>معلومات الدفع</h2>
+            <form id="checkout-form">
+                <div class="form-group name">
+                    <input type="text" id="name" placeholder="الاسم الكامل" required>
+                </div>
+                <div class="form-group email">
+                    <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+                </div>
+                <div class="form-group phone">
+                    <input type="tel" id="phone" placeholder="رقم الهاتف" required>
+                </div>
+                <div class="form-group address">
+                    <textarea id="address" placeholder="عنوان التوصيل" required></textarea>
+                </div>
+                <div class="payment-methods">
+                    <h3>طريقة الدفع</h3>
+                    <label><input type="radio" name="payment" value="credit-card" required> بطاقة ائتمان</label>
+                    <label><input type="radio" name="payment" value="apple-pay"> Apple Pay</label>
+                    <label><input type="radio" name="payment" value="google-pay"> Google Pay</label>
+                </div>
+                <div class="delivery-methods">
+                    <h3>طريقة التوصيل</h3>
+                    <label><input type="radio" name="delivery" value="standard" required> توصيل عادي (5$) - 3-5 أيام</label>
+                    <label><input type="radio" name="delivery" value="express"> توصيل سريع (10$) - 1-2 أيام</label>
+                </div>
+                <div id="terms">
+                    <input type="checkbox" id="agree-terms">
+                    <label for="agree-terms">أوافق على <a href="#">الشروط والأحكام</a></label>
+                </div>
+                <button id="submit-btn" disabled>إرسال الطلب</button>
+                <button type="button" class="back-btn" onclick="window.location.href='index.html'">العودة إلى الصفحة الرئيسية</button>
+            </form>
+        </div>
+    </div>
+
+<script>
+    const selectedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+    
+    function displayOrderDetails() {
+        const orderBody = document.getElementById('order-table-body');
+        orderBody.innerHTML = '';
+        selectedItems.forEach(item => {
+            const totalItemPrice = item.price * item.quantity;
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><img src="${item.image}" alt="${item.name}"> ${item.name}</td>
+                <td>${item.price} $</td>
+                <td>${item.quantity}</td>
+                <td>${totalItemPrice} $</td>
+            `;
+            orderBody.appendChild(row);
+        });
+        
+        updateSummary();
+    }
+
+    function updateSummary() {
+        const subtotal = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const tax = subtotal * 0.05; // ضريبة 5%
+        let shipping = 0;
+        const deliveryMethod = document.querySelector('input[name="delivery"]:checked');
+        if (deliveryMethod) {
+            shipping = deliveryMethod.value === 'standard' ? 5 : 10;
+        }
+        const total = subtotal + tax + shipping;
+
+        document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+        document.getElementById('tax').innerText = tax.toFixed(2);
+        document.getElementById('shipping').innerText = shipping.toFixed(2);
+        document.getElementById('total-amount').innerText = total.toFixed(2);
+    }
+
+    document.querySelectorAll('input[name="delivery"]').forEach(input => {
+        input.addEventListener('change', updateSummary);
+    });
+
+    document.getElementById('agree-terms').addEventListener('change', function() {
+        document.getElementById('submit-btn').disabled = !this.checked;
+    });
+
+    document.getElementById('checkout-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
+        const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+        const deliveryMethod = document.querySelector('input[name="delivery"]:checked').value;
+        
+        if (!name || !email || !phone || !address) {
+            alert('يرجى تعبئة جميع الحقول.');
+            return;
+        }
+        
+        const subtotal = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const tax = subtotal * 0.05;
+        const shipping = deliveryMethod === 'standard' ? 5 : 10;
+        const totalPrice = subtotal + tax + shipping;
+        const purchaseDate = new Date().toLocaleString('ar', { timeZone: 'Asia/Muscat' });
+        
+        let message = `🛒 *طلب جديد من tkchop.om* 🛒\n\n`;
+        message += `👤 *الاسم*: ${name}\n`;
+        message += `📧 *البريد الإلكتروني*: ${email}\n`;
+        message += `📞 *رقم الهاتف*: ${phone}\n`;
+        message += `🏠 *العنوان*: ${address}\n`;
+        message += `💳 *طريقة الدفع*: ${paymentMethod}\n`;
+        message += `🚚 *طريقة التوصيل*: ${deliveryMethod === 'standard' ? 'توصيل عادي (5$)' : 'توصيل سريع (10$)'}\n`;
+        message += `📅 *تاريخ الشراء*: ${purchaseDate}\n\n`;
+        message += `🛍️ *المنتجات*:\n`;
+        selectedItems.forEach(item => {
+            message += `- ${item.name}: ${item.price} $ × ${item.quantity} = ${(item.price * item.quantity).toFixed(2)} $\n`;
+        });
+        message += `\n💰 *المجموع الفرعي*: ${subtotal.toFixed(2)} $\n`;
+        message += `🧾 *الضرائب (5%)*: ${tax.toFixed(2)} $\n`;
+        message += `🚛 *تكلفة الشحن*: ${shipping.toFixed(2)} $\n`;
+        message += `📊 *السعر الإجمالي*: ${totalPrice.toFixed(2)} $\n`;
+        
+        const whatsappUrl = `https://wa.me/96879470467?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+        
+        localStorage.removeItem('selectedItems');
+        alert('تم إرسال طلبك بنجاح! سيتم التواصل معك قريبًا.');
+        window.close();
+    });
+
+    displayOrderDetails();
+</script>
+</body>
+</html>
