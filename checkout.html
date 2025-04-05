@@ -99,6 +99,16 @@
             color: #FF69B4;
             font-weight: 600;
         }
+        .notes-display {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f5f6f5;
+            border-radius: 5px;
+        }
+        .notes-display h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
         .checkout-form {
             background: #fff;
             padding: 20px;
@@ -152,24 +162,21 @@
         .form-group.phone::before {
             background: url('phone-icon.png') no-repeat center;
         }
-        .form-group.address::before {
-            background: url('address-icon.png') no-repeat center;
-        }
-        .payment-methods, .delivery-methods {
+        .payment-methods {
             margin: 20px 0;
         }
-        .payment-methods h3, .delivery-methods h3 {
+        .payment-methods h3 {
             font-size: 18px;
             color: #1a2b3c;
             margin-bottom: 10px;
         }
-        .payment-methods label, .delivery-methods label {
+        .payment-methods label {
             display: block;
             margin: 10px 0;
             font-size: 16px;
             color: #1a2b3c;
         }
-        .payment-methods input[type="radio"], .delivery-methods input[type="radio"] {
+        .payment-methods input[type="radio"] {
             margin-left: 10px;
         }
         #terms {
@@ -181,6 +188,14 @@
             margin-right: 10px;
             font-size: 14px;
             color: #546e7a;
+        }
+        #terms a {
+            color: #6A0DAD;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        #terms a:hover {
+            text-decoration: underline;
         }
         button {
             background: #6A0DAD;
@@ -215,6 +230,75 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
+
+        /* تنسيق النافذة المنبثقة للشروط والأحكام */
+        #terms-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        #terms-modal > div {
+            background: #FFFFFF;
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border-top: 5px solid #6A0DAD;
+            transform: scale(0.8);
+            animation: popIn 0.3s ease-in-out forwards;
+            color: #1a2b3c;
+        }
+        #terms-modal h2 {
+            margin: 0 0 20px;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+        }
+        #terms-modal .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #546e7a;
+            transition: color 0.3s;
+        }
+        #terms-modal .close-btn:hover {
+            color: #FF69B4;
+        }
+        #terms-modal .terms-content {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background: #fafafa;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        #terms-modal .terms-content h3 {
+            font-size: 18px;
+            margin: 15px 0 10px;
+        }
+        #terms-modal .terms-content p {
+            margin: 10px 0;
+        }
+        #terms-modal .terms-content ul {
+            margin: 10px 0;
+            padding-right: 20px;
+        }
+        #terms-modal .terms-content li {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
@@ -235,11 +319,12 @@
                     <tbody id="order-table-body"></tbody>
                 </table>
             </div>
+            <div class="notes-display" id="order-notes-section" style="display: none;">
+                <h3>ملاحظات الطلب:</h3>
+                <p id="order-notes"></p>
+            </div>
             <div class="summary-details">
-                <p>المجموع الفرعي: <span id="subtotal">0</span> $</p>
-                <p>الضرائب (5%): <span id="tax">0</span> $</p>
-                <p>تكلفة الشحن: <span id="shipping">0</span> $</p>
-                <p>السعر الإجمالي: <span id="total-amount">0</span> $</p>
+                <p>السعر الإجمالي: <span id="total-amount">0</span> ر.ع</p>
             </div>
         </div>
         <div class="checkout-form">
@@ -254,27 +339,63 @@
                 <div class="form-group phone">
                     <input type="tel" id="phone" placeholder="رقم الهاتف" required>
                 </div>
-                <div class="form-group address">
-                    <textarea id="address" placeholder="عنوان التوصيل" required></textarea>
-                </div>
                 <div class="payment-methods">
                     <h3>طريقة الدفع</h3>
                     <label><input type="radio" name="payment" value="credit-card" required> بطاقة ائتمان</label>
                     <label><input type="radio" name="payment" value="apple-pay"> Apple Pay</label>
                     <label><input type="radio" name="payment" value="google-pay"> Google Pay</label>
                 </div>
-                <div class="delivery-methods">
-                    <h3>طريقة التوصيل</h3>
-                    <label><input type="radio" name="delivery" value="standard" required> توصيل عادي (5$) - 3-5 أيام</label>
-                    <label><input type="radio" name="delivery" value="express"> توصيل سريع (10$) - 1-2 أيام</label>
-                </div>
                 <div id="terms">
                     <input type="checkbox" id="agree-terms">
-                    <label for="agree-terms">أوافق على <a href="#">الشروط والأحكام</a></label>
+                    <label for="agree-terms">أوافق على <a onclick="openTermsModal()">الشروط والأحكام</a></label>
                 </div>
                 <button id="submit-btn" disabled>إرسال الطلب</button>
                 <button type="button" class="back-btn" onclick="window.location.href='index.html'">العودة إلى الصفحة الرئيسية</button>
             </form>
+        </div>
+    </div>
+
+    <!-- نافذة الشروط والأحكام -->
+    <div id="terms-modal">
+        <div>
+            <span class="close-btn" onclick="closeTermsModal()">✖</span>
+            <h2>الشروط والأحكام</h2>
+            <div class="terms-content">
+                <h3>1. مقدمة</h3>
+                <p>مرحبًا بكم في موقع tkchop.om. نحن متجر إلكتروني متخصص في بيع المنتجات الرقمية مثل الألعاب الإلكترونية والبرامج. باستخدام هذا الموقع، فإنك توافق على الالتزام بالشروط والأحكام التالية. يرجى قراءتها بعناية قبل إتمام أي عملية شراء.</p>
+
+                <h3>2. شروط الشراء</h3>
+                <p>جميع المنتجات المعروضة على الموقع هي منتجات رقمية (مثل الألعاب الإلكترونية أو البرامج) ويتم تسليمها عبر البريد الإلكتروني أو رابط تحميل بعد إتمام الدفع بنجاح.</p>
+                <ul>
+                    <li>يجب أن تكون جميع المعلومات المقدمة (مثل الاسم، البريد الإلكتروني، رقم الهاتف) دقيقة وكاملة.</li>
+                    <li>الأسعار المعروضة هي الأسعار النهائية ولا تشمل أي ضرائب إضافية أو رسوم شحن لأن المنتجات رقمية.</li>
+                    <li>الدفع يتم عبر الطرق المتاحة (بطاقة ائتمان، Apple Pay، Google Pay).</li>
+                </ul>
+
+                <h3>3. تسليم المنتجات الرقمية</h3>
+                <p>بعد إتمام الدفع بنجاح، سيتم إرسال رابط التحميل أو مفتاح التنشيط إلى البريد الإلكتروني المقدم خلال 24 ساعة. يرجى التحقق من مجلد الرسائل غير المرغوب فيها (Spam) إذا لم تتلق الرسالة.</p>
+                <p>نحن غير مسؤولين عن أي تأخير ناتج عن إدخال بريد إلكتروني غير صحيح من قبل العميل.</p>
+
+                <h3>4. سياسة الإرجاع والاسترداد</h3>
+                <p>نظرًا لطبيعة المنتجات الرقمية، لا يمكن إرجاع المنتجات أو استرداد قيمتها بعد إرسال مفتاح التنشيط أو رابط التحميل، إلا في الحالات التالية:</p>
+                <ul>
+                    <li>إذا كان مفتاح التنشيط غير صالح أو لا يعمل.</li>
+                    <li>إذا لم يتم تسليم المنتج خلال 48 ساعة من الدفع.</li>
+                </ul>
+                <p>في هذه الحالات، يرجى التواصل معنا خلال 7 أيام من تاريخ الشراء لتقديم طلب استرداد.</p>
+
+                <h3>5. التراخيص والاستخدام</h3>
+                <p>جميع المنتجات الرقمية المباعة تخضع لشروط الترخيص الخاصة بالمطور أو الناشر. بمجرد شراء المنتج، فإنك توافق على استخدامه وفقًا لشروط الترخيص هذه. لا يُسمح بإعادة بيع أو توزيع مفاتيح التنشيط أو المنتجات الرقمية دون إذن مسبق.</p>
+
+                <h3>6. الخصوصية</h3>
+                <p>نحن ملتزمون بحماية بياناتك الشخصية. لن يتم مشاركة معلوماتك مع أي طرف ثالث دون موافقتك، باستثناء ما هو ضروري لإتمام عملية الشراء وتسليم المنتج الرقمي.</p>
+
+                <h3>7. التعديلات على الشروط</h3>
+                <p>نحتفظ بالحق في تعديل هذه الشروط والأحكام في أي وقت. سيتم تطبيق النسخة المحدثة على جميع الطلبات المقدمة بعد التعديل.</p>
+
+                <h3>8. التواصل</h3>
+                <p>إذا كان لديك أي استفسار حول هذه الشروط، يمكنك التواصل معنا عبر الواتساب على الرقم: 96879470467.</p>
+            </div>
         </div>
     </div>
 
@@ -285,13 +406,13 @@
         const orderBody = document.getElementById('order-table-body');
         orderBody.innerHTML = '';
         selectedItems.forEach(item => {
-            const totalItemPrice = item.price * item.quantity;
+            const totalItemPrice = (item.price * item.quantity).toFixed(2);
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td><img src="${item.image}" alt="${item.name}"> ${item.name}</td>
-                <td>${item.price} $</td>
+                <td>${item.price} ر.ع</td>
                 <td>${item.quantity}</td>
-                <td>${totalItemPrice} $</td>
+                <td>${totalItemPrice} ر.ع</td>
             `;
             orderBody.appendChild(row);
         });
@@ -300,24 +421,16 @@
     }
 
     function updateSummary() {
-        const subtotal = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        const tax = subtotal * 0.05; // ضريبة 5%
-        let shipping = 0;
-        const deliveryMethod = document.querySelector('input[name="delivery"]:checked');
-        if (deliveryMethod) {
-            shipping = deliveryMethod.value === 'standard' ? 5 : 10;
-        }
-        const total = subtotal + tax + shipping;
-
-        document.getElementById('subtotal').innerText = subtotal.toFixed(2);
-        document.getElementById('tax').innerText = tax.toFixed(2);
-        document.getElementById('shipping').innerText = shipping.toFixed(2);
+        const total = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
         document.getElementById('total-amount').innerText = total.toFixed(2);
     }
 
-    document.querySelectorAll('input[name="delivery"]').forEach(input => {
-        input.addEventListener('change', updateSummary);
-    });
+    // عرض ملاحظات الطلب إذا وجدت
+    const orderNotes = localStorage.getItem('orderNotes');
+    if (orderNotes) {
+        document.getElementById('order-notes-section').style.display = 'block';
+        document.getElementById('order-notes').innerText = orderNotes;
+    }
 
     document.getElementById('agree-terms').addEventListener('change', function() {
         document.getElementById('submit-btn').disabled = !this.checked;
@@ -328,45 +441,48 @@
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
         const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-        const deliveryMethod = document.querySelector('input[name="delivery"]:checked').value;
         
-        if (!name || !email || !phone || !address) {
+        if (!name || !email || !phone) {
             alert('يرجى تعبئة جميع الحقول.');
             return;
         }
         
-        const subtotal = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        const tax = subtotal * 0.05;
-        const shipping = deliveryMethod === 'standard' ? 5 : 10;
-        const totalPrice = subtotal + tax + shipping;
+        const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
         const purchaseDate = new Date().toLocaleString('ar', { timeZone: 'Asia/Muscat' });
         
         let message = `🛒 *طلب جديد من tkchop.om* 🛒\n\n`;
         message += `👤 *الاسم*: ${name}\n`;
         message += `📧 *البريد الإلكتروني*: ${email}\n`;
         message += `📞 *رقم الهاتف*: ${phone}\n`;
-        message += `🏠 *العنوان*: ${address}\n`;
         message += `💳 *طريقة الدفع*: ${paymentMethod}\n`;
-        message += `🚚 *طريقة التوصيل*: ${deliveryMethod === 'standard' ? 'توصيل عادي (5$)' : 'توصيل سريع (10$)'}\n`;
-        message += `📅 *تاريخ الشراء*: ${purchaseDate}\n\n`;
-        message += `🛍️ *المنتجات*:\n`;
+        message += `📅 *تاريخ الشراء*: ${purchaseDate}\n`;
+        if (orderNotes) {
+            message += `📝 *ملاحظات الطلب*: ${orderNotes}\n`;
+        }
+        message += `\n🛍️ *المنتجات*:\n`;
         selectedItems.forEach(item => {
-            message += `- ${item.name}: ${item.price} $ × ${item.quantity} = ${(item.price * item.quantity).toFixed(2)} $\n`;
+            message += `- ${item.name}: ${item.price} ر.ع × ${item.quantity} = ${(item.price * item.quantity).toFixed(2)} ر.ع\n`;
         });
-        message += `\n💰 *المجموع الفرعي*: ${subtotal.toFixed(2)} $\n`;
-        message += `🧾 *الضرائب (5%)*: ${tax.toFixed(2)} $\n`;
-        message += `🚛 *تكلفة الشحن*: ${shipping.toFixed(2)} $\n`;
-        message += `📊 *السعر الإجمالي*: ${totalPrice.toFixed(2)} $\n`;
+        message += `\n📊 *السعر الإجمالي*: ${totalPrice.toFixed(2)} ر.ع\n`;
         
         const whatsappUrl = `https://wa.me/96879470467?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
         
         localStorage.removeItem('selectedItems');
-        alert('تم إرسال طلبك بنجاح! سيتم التواصل معك قريبًا.');
+        localStorage.removeItem('orderNotes');
+        alert('تم إرسال طلبك بنجاح! سيتم التواصل معك قريبًا لإرسال المنتجات الرقمية إلى بريدك الإلكتروني.');
         window.close();
     });
+
+    // دوال لفتح وإغلاق نافذة الشروط والأحكام
+    function openTermsModal() {
+        document.getElementById('terms-modal').style.display = 'block';
+    }
+
+    function closeTermsModal() {
+        document.getElementById('terms-modal').style.display = 'none';
+    }
 
     displayOrderDetails();
 </script>
