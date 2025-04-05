@@ -7,13 +7,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* إعدادات عامة */
+        html {
+            scroll-behavior: smooth; /* جعل التمرير سلسًا */
+        }
         body {
             font-family: 'Cairo', sans-serif;
             margin: 0;
             padding: 0;
             background: linear-gradient(to bottom, #4B0082, #1C2526);
             color: #FFFFFF;
-            overflow-x: hidden;
+            overflow-x: hidden; /* منع التمرير الأفقي */
             animation: fadeIn 1s ease-in-out;
         }
 
@@ -22,20 +25,21 @@
             100% { opacity: 1; }
         }
 
-        /* شريط الإعلانات */
+        /* شريط الإعلانات (السلايدر) */
         .ads-slider {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 300px; /* ارتفاع افتراضي */
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 30px; /* زيادة المسافة بين السلايدر وباقي الصفحة */
             background: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* إضافة ظل لتحسين المظهر */
         }
         .ads-slider img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* ضبط الصورة لتغطية السلايدر */
             position: absolute;
             opacity: 0;
             transform: translateX(100%);
@@ -122,34 +126,69 @@
             display: inline-block; /* إظهار العداد إذا كان هناك عناصر */
         }
 
-        /* شريط البحث والفلترة */
-        .search-filter {
-            max-width: 1200px;
-            margin: 20px auto;
+        /* تنسيق زر القائمة المنسدلة (ثلاثة خطوط) */
+        .hamburger {
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            padding: 0 20px;
+            width: 30px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 1001;
         }
-        .search-filter input[type="text"] {
-            padding: 10px;
-            border: 1px solid #6A0DAD;
-            border-radius: 5px;
-            width: 300px;
-            font-size: 16px;
+        .hamburger span {
+            width: 100%;
+            height: 3px;
+            background: #FFFFFF;
+            transition: all 0.3s ease;
         }
-        .price-filter {
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -250px; /* مخفية على اليمين */
+            width: 250px;
+            height: 100%;
+            background: #FFFFFF;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
             display: flex;
-            align-items: center;
-            gap: 10px;
+            flex-direction: column;
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
         }
-        .price-filter input[type="range"] {
-            width: 200px;
+        .nav-menu.active {
+            right: 0; /* تظهر من اليمين إلى اليسار */
         }
-        .price-filter span {
+        .nav-menu a {
+            padding: 15px 20px;
+            color: #1a2b3c;
+            text-decoration: none;
             font-size: 16px;
-            color: #D3D3D3;
+            transition: background 0.3s;
+        }
+        .nav-menu a:hover {
+            background: #f5f6f5;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+        .overlay.active {
+            display: block;
         }
 
         /* الأقسام */
@@ -170,12 +209,14 @@
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
+            box-sizing: border-box;
         }
 
         .product {
             background: #5D2E8C;
             border-radius: 8px;
-            width: 280px;
+            width: 100%;
+            max-width: 280px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
             padding: 20px;
             text-align: center;
@@ -183,6 +224,7 @@
             color: #FFFFFF;
             animation: fadeInUp 0.5s ease-in-out;
             position: relative;
+            box-sizing: border-box;
         }
         @keyframes fadeInUp {
             0% { opacity: 0; transform: translateY(20px); }
@@ -390,6 +432,8 @@
             justify-content: space-between;
             align-items: center;
             margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         #clear-cart-btn {
             background: #FF69B4;
@@ -433,6 +477,89 @@
             0% { transform: translateX(100%); opacity: 0; }
             100% { transform: translateX(0); opacity: 1; }
         }
+
+        /* التصميم المتجاوب */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            .product-section {
+                flex-direction: column;
+                align-items: center;
+            }
+            .product {
+                max-width: 90%;
+            }
+            .ads-slider {
+                height: 200px; /* تقليل ارتفاع السلايدر */
+            }
+            #cart-modal > div {
+                width: 95%;
+                padding: 20px;
+            }
+            #cart-table th, #cart-table td {
+                padding: 10px;
+                font-size: 14px;
+            }
+            #cart-table td img {
+                width: 40px;
+                height: 40px;
+            }
+            #cart-table input[type="number"] {
+                width: 50px;
+            }
+            .cart-actions {
+                flex-direction: column;
+            }
+            #clear-cart-btn, #checkout-btn {
+                width: 100%;
+                padding: 12px;
+            }
+            .nav-menu {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 24px;
+            }
+            .product {
+                max-width: 100%;
+                padding: 15px;
+            }
+            .product h3 {
+                font-size: 18px;
+            }
+            .price {
+                font-size: 20px;
+            }
+            button {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            .favorite-btn {
+                padding: 10px;
+            }
+            .ads-slider {
+                height: 150px; /* تقليل ارتفاع السلايدر أكثر */
+            }
+            #cart-modal h2 {
+                font-size: 24px;
+            }
+            #total-price-section {
+                font-size: 18px;
+            }
+            .nav-menu {
+                width: 180px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -443,7 +570,19 @@
         <a href="#clothing">الملابس</a>
         <a href="#games">الألعاب</a>
     </div>
-    <div class="cart-icon" onclick="openCart()">🛒 <span id="cart-count">0</span></div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <div class="cart-icon" onclick="openCart()">🛒 <span id="cart-count">0</span></div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div class="nav-menu" id="nav-menu">
+        <a href="index.html">tkchop.om</a>
+        <a href="orders.html">الطلبات المكتملة</a>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 </header>
 
 <div class="ads-slider">
@@ -454,14 +593,6 @@
     <div class="slider-controls">
         <button onclick="prevAd()">❮</button>
         <button onclick="nextAd()">❯</button>
-    </div>
-</div>
-
-<div class="search-filter">
-    <input type="text" id="search-input" placeholder="ابحث عن منتج..." onkeyup="filterProducts()">
-    <div class="price-filter">
-        <label for="price-range">السعر: حتى <span id="price-value">1000</span> $</label>
-        <input type="range" id="price-range" min="0" max="1000" value="1000" oninput="filterProducts()">
     </div>
 </div>
 
@@ -487,7 +618,7 @@
                 السلة فارغة. أضف بعض المنتجات!
             </div>
         </div>
-        <p id="total-price-section">السعر الإجمالي: <span id="total-price">0</span> $</p>
+        <p id="total-price-section">السعر الإجمالي: <span id="total-price">0</span> ر.ع</p>
         <div class="cart-actions">
             <button id="clear-cart-btn" onclick="clearCart()">مسح السلة</button>
             <button id="checkout-btn" onclick="proceedToCheckout()">إتمام الشراء</button>
@@ -499,47 +630,47 @@
 
 <h2 class="section-title" id="electronics">المنتجات الإلكترونية</h2>
 <section class="product-section">
-    <div class="product" data-name="لابتوب" data-price="700" data-price-old="800">
+    <div class="product" data-name="لابتوب" data-price="269.5" data-price-old="308">
         <div class="discount-badge">خصم 12%</div>
         <img src="product1.jpg" alt="لابتوب">
         <h3>لابتوب</h3>
         <p>أفضل أداء بسعر رائع</p>
         <span class="rating">★★★★★</span>
-        <span class="price"><span class="price-old">$800</span> $700</span>
+        <span class="price"><span class="price-old">308 ر.ع</span> 269.5 ر.ع</span>
         <div class="product-actions">
             <button onclick="addToCart(this)">أضف إلى السلة</button>
             <button class="favorite-btn" onclick="addToFavorites(this)">❤️</button>
         </div>
     </div>
-    <div class="product" data-name="سماعات بلوتوث" data-price="50">
+    <div class="product" data-name="سماعات بلوتوث" data-price="19.25">
         <img src="product2.jpg" alt="سماعات بلوتوث">
         <h3>سماعات بلوتوث</h3>
         <p>صوت نقي وعزل ضوضاء</p>
         <span class="rating">★★★★☆</span>
-        <span class="price">$50</span>
+        <span class="price">19.25 ر.ع</span>
         <div class="product-actions">
             <button onclick="addToCart(this)">أضف إلى السلة</button>
             <button class="favorite-btn" onclick="addToFavorites(this)">❤️</button>
         </div>
     </div>
-    <div class="product" data-name="هاتف ذكي" data-price="500">
+    <div class="product" data-name="هاتف ذكي" data-price="192.5">
         <img src="product4.jpg" alt="هاتف ذكي">
         <h3>هاتف ذكي</h3>
         <p>كاميرا عالية الجودة</p>
         <span class="rating">★★★★★</span>
-        <span class="price">$500</span>
+        <span class="price">192.5 ر.ع</span>
         <div class="product-actions">
             <button onclick="addToCart(this)">أضف إلى السلة</button>
             <button class="favorite-btn" onclick="addToFavorites(this)">❤️</button>
         </div>
     </div>
-    <div class="product" data-name="ساعة ذكية" data-price="150" data-price-old="200">
+    <div class="product" data-name="ساعة ذكية" data-price="57.75" data-price-old="77">
         <div class="discount-badge">خصم 25%</div>
         <img src="product5.jpg" alt="ساعة ذكية">
         <h3>ساعة ذكية</h3>
         <p>تتبع اللياقة والصحة</p>
         <span class="rating">★★★★☆</span>
-        <span class="price"><span class="price-old">$200</span> $150</span>
+        <span class="price"><span class="price-old">77 ر.ع</span> 57.75 ر.ع</span>
         <div class="product-actions">
             <button onclick="addToCart(this)">أضف إلى السلة</button>
             <button class="favorite-btn" onclick="addToFavorites(this)">❤️</button>
@@ -549,34 +680,34 @@
 
 <h2 class="section-title" id="clothing">الملابس</h2>
 <section class="product-section">
-    <div class="product" data-name="جاكيت شتوي" data-price="120">
+    <div class="product" data-name="جاكيت شتوي" data-price="46.2">
         <img src="product3.jpg" alt="جاكيت شتوي">
         <h3>جاكيت شتوي</h3>
         <p>دفء وأناقة</p>
         <span class="rating">★★★★★</span>
-        <span class="price">$ Ascendingly $120</span>
+        <span class="price">46.2 ر.ع</span>
         <div class="product-actions">
             <button onclick="addToCart(this)">أضف إلى السلة</button>
             <button class="favorite-btn" onclick="addToFavorites(this)">❤️</button>
         </div>
     </div>
-    <div class="product" data-name="قميص رياضي" data-price="40">
+    <div class="product" data-name="قميص رياضي" data-price="15.4">
         <img src="product6.jpg" alt="قميص رياضي">
         <h3>قميص رياضي</h3>
         <p>مريح ومناسب للتمارين</p>
         <span class="rating">★★★★☆</span>
-        <span class="price">$40</span>
+        <span class="price">15.4 ر.ع</span>
         <div class="product-actions">
             <button onclick="addToCart(this)">أضف إلى السلة</button>
             <button class="favorite-btn" onclick="addToFavorites(this)">❤️</button>
         </div>
     </div>
-    <div class="product" data-name="بنطال جينز" data-price="60">
+    <div class="product" data-name="بنطال جينز" data-price="23.1">
         <img src="product7.jpg" alt="بنطال جينز">
         <h3>بنطال جينز</h3>
         <p>تصميم عصري</p>
         <span class="rating">★★★★★</span>
-        <span class="price">$60</span>
+        <span class="price">23.1 ر.ع</span>
         <div class="product-actions">
             <button onclick="addToCart(this)">أضف إلى السلة</button>
             <button class="favorite-btn" onclick="addToFavorites(this)">❤️</button>
@@ -586,23 +717,23 @@
 
 <h2 class="section-title" id="games">الألعاب الإلكترونية</h2>
 <section class="product-section">
-    <div class="product" data-name="لعبة FIFA 25" data-price="70">
+    <div class="product" data-name="لعبة FIFA 25" data-price="26.95">
         <img src="game1.jpg" alt="لعبة FIFA 25">
         <h3>FIFA 25</h3>
         <p>تجربة كرة قدم واقعية</p>
         <span class="rating">★★★★★</span>
-        <span class="price">$70</span>
+        <span class="price">26.95 ر.ع</span>
         <div class="product-actions">
             <button onclick="addToCart(this)">أضف إلى السلة</button>
             <button class="favorite-btn" onclick="addToFavorites(this)">❤️</button>
         </div>
     </div>
-    <div class="product" data-name="لعبة Call of Duty" data-price="60">
+    <div class="product" data-name="لعبة Call of Duty" data-price="23.1">
         <img src="game2.jpg" alt="لعبة Call of Duty">
         <h3>Call of Duty</h3>
         <p>معارك ملحمية</p>
         <span class="rating">★★★★☆</span>
-        <span class="price">$60</span>
+        <span class="price">23.1 ر.ع</span>
         <div class="product-actions">
             <button onclick="addToCart(this)">أضف إلى السلة</button>
             <button class="favorite-btn" onclick="addToFavorites(this)">❤️</button>
@@ -734,13 +865,13 @@
                 row.innerHTML = `
                     <td><input type="checkbox" id="item-${index}" onchange="updateTotalPrice()"></td>
                     <td><img src="${item.image}" alt="${item.name}"> ${item.name}</td>
-                    <td>${item.price} $</td>
+                    <td>${item.price} ر.ع</td>
                     <td>
                         <button onclick="changeQuantity(${index}, -1)">-</button>
                         <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${index}, this.value)">
                         <button onclick="changeQuantity(${index}, 1)">+</button>
                     </td>
-                    <td>${totalItemPrice} $</td>
+                    <td>${totalItemPrice} ر.ع</td>
                     <td><button onclick="removeItem(${index})">حذف</button></td>
                 `;
                 cartBody.appendChild(row);
@@ -812,9 +943,9 @@
         const cartCount = document.getElementById('cart-count');
         cartCount.innerText = totalItems;
         if (totalItems > 0) {
-            cartCount.classList.add('visible'); // إظهار العداد إذا كان هناك عناصر
+            cartCount.classList.add('visible');
         } else {
-            cartCount.classList.remove('visible'); // إخفاء العداد إذا كانت السلة فارغة
+            cartCount.classList.remove('visible');
         }
     }
 
@@ -843,23 +974,14 @@
         window.open('checkout.html', '_blank');
     }
 
-    // دالة لفلترة المنتجات
-    function filterProducts() {
-        const searchQuery = document.getElementById('search-input').value.toLowerCase();
-        const maxPrice = parseFloat(document.getElementById('price-range').value);
-        document.getElementById('price-value').innerText = maxPrice;
-
-        const products = document.querySelectorAll('.product');
-        products.forEach(product => {
-            const name = product.getAttribute('data-name').toLowerCase();
-            const price = parseFloat(product.getAttribute('data-price'));
-
-            if (name.includes(searchQuery) && price <= maxPrice) {
-                product.style.display = 'block';
-            } else {
-                product.style.display = 'none';
-            }
-        });
+    // دالة لفتح وإغلاق القائمة المنسدلة
+    function toggleMenu() {
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.getElementById('nav-menu');
+        const overlay = document.getElementById('overlay');
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+        overlay.classList.toggle('active');
     }
 
     // إعدادات السلايدر
