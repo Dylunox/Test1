@@ -413,6 +413,23 @@
             background: #5A0A9A;
             transform: scale(1.05);
         }
+        #toast {
+            position: fixed;
+            top: 20px;
+            right: -300px;
+            background: #6A0DAD;
+            color: #FFFFFF;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            font-size: 16px;
+            font-weight: 600;
+            transition: right 0.5s ease;
+        }
+        #toast.show {
+            right: 20px;
+        }
     </style>
 </head>
 <body>
@@ -461,7 +478,7 @@
                 <button onclick="addToCart(this)">أضف إلى السلة</button>
             </div>
             <div class="product" data-name="بطاقة رقمية 2" data-price="75">
-                <img src="digital2.jpg" alt="بطاقة رقمية球员2">
+                <img src="digital2.jpg" alt="بطاقة رقمية 2">
                 <h3>بطاقة رقمية 2</h3>
                 <span class="price">75 ر.ع</span>
                 <button onclick="addToCart(this)">أضف إلى السلة</button>
@@ -582,6 +599,8 @@
     </div>
 </div>
 
+<div id="toast"></div>
+
 <script>
     let cartItems = [];
 
@@ -632,7 +651,16 @@
 
         saveCart();
         updateCartDisplay();
-        alert(`تم إضافة "${name}" إلى السلة!`);
+        showToast(`تم إضافة "${name}" إلى السلة!`);
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
     }
 
     function updateCartDisplay() {
@@ -677,7 +705,7 @@
 
     function clearCart() {
         if (cartItems.length === 0) {
-            alert('السلة فارغة بالفعل.');
+            showToast('السلة فارغة بالفعل.');
             return;
         }
         if (confirm('هل تريد مسح جميع العناصر من السلة؟')) {
@@ -711,7 +739,7 @@
 
     function proceedToCheckout() {
         if (cartItems.length === 0) {
-            alert('السلة فارغة، أضف منتجات للمتابعة.');
+            showToast('السلة فارغة، أضف منتجات للمتابعة.');
             return;
         }
         localStorage.setItem('selectedItems', JSON.stringify(cartItems));
