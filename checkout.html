@@ -168,15 +168,15 @@
         .form-group.notes::before {
             background: url('notes-icon.png') no-repeat center;
         }
-        .payment-methods {
+        .payment-methods, .contact-methods {
             margin: 20px 0;
         }
-        .payment-methods h3 {
+        .payment-methods h3, .contact-methods h3 {
             font-size: 18px;
             color: #6A0DAD;
             margin-bottom: 10px;
         }
-        .payment-methods label {
+        .payment-methods label, .contact-methods label {
             display: block;
             margin: 10px 0;
             font-size: 16px;
@@ -184,10 +184,10 @@
             cursor: pointer;
             transition: color 0.3s;
         }
-        .payment-methods label:hover {
+        .payment-methods label:hover, .contact-methods label:hover {
             color: #FF69B4;
         }
-        .payment-methods input[type="radio"] {
+        .payment-methods input[type="radio"], .contact-methods input[type="radio"] {
             margin-left: 10px;
         }
         #terms {
@@ -370,6 +370,12 @@
                     <label><input type="radio" name="payment" value="Apple Pay"> Apple Pay</label>
                     <label><input type="radio" name="payment" value="Google Pay"> Google Pay</label>
                 </div>
+                <div class="contact-methods">
+                    <h3>طريقة التواصل</h3>
+                    <label><input type="radio" name="contact" value="whatsapp" required> واتساب</label>
+                    <label><input type="radio" name="contact" value="email"> إيميل</label>
+                    <label><input type="radio" name="contact" value="instagram"> إنستغرام</label>
+                </div>
                 <div id="terms">
                     <input type="checkbox" id="agree-terms">
                     <label for="agree-terms">أوافق على <a onclick="openTermsModal()">الشروط والأحكام</a></label>
@@ -477,6 +483,7 @@
         const phone = sanitizeInput(document.getElementById('phone').value.trim());
         const notes = sanitizeInput(document.getElementById('notes').value.trim()) || 'غير محدد';
         const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+        const contactMethod = document.querySelector('input[name="contact"]:checked').value;
 
         if (!name || !email || !phone || !/^[0-9]{8,15}$/.test(phone)) {
             return;
@@ -501,8 +508,17 @@
         });
         message += `\n💰 *الإجمالي*: ${totalPrice} ر.ع`;
 
-        const whatsappUrl = `https://wa.me/96879470467?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+        if (contactMethod === 'whatsapp') {
+            const whatsappUrl = `https://wa.me/96879470467?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        } else if (contactMethod === 'email') {
+            const subject = encodeURIComponent('طلب جديد من tkchop.om');
+            const emailUrl = `mailto:tkchop.om@gmail.com?subject=${subject}&body=${encodeURIComponent(message)}`;
+            window.location.href = emailUrl;
+        } else if (contactMethod === 'instagram') {
+            const instagramUrl = `https://www.instagram.com/direct/t/abdullah__krs/?message=${encodeURIComponent(message)}`;
+            window.open(instagramUrl, '_blank');
+        }
 
         localStorage.removeItem('selectedItems');
         localStorage.removeItem('orderNotes');
