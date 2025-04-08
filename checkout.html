@@ -136,8 +136,9 @@
             transition: border-color 0.3s, box-shadow 0.3s;
             background: #fafafa;
         }
-        .form-group textarea {
-            height: 100px;
+        .form-group.notes textarea {
+            width: 70%;
+            height: 80px;
             resize: none;
         }
         .form-group input:focus, .form-group textarea:focus {
@@ -163,6 +164,9 @@
         }
         .form-group.phone::before {
             background: url('phone-icon.png') no-repeat center;
+        }
+        .form-group.notes::before {
+            background: url('notes-icon.png') no-repeat center;
         }
         .payment-methods {
             margin: 20px 0;
@@ -357,6 +361,9 @@
                 <div class="form-group phone">
                     <input type="tel" id="phone" placeholder="رقم الهاتف" required pattern="[0-9]{8,15}">
                 </div>
+                <div class="form-group notes">
+                    <textarea id="notes" placeholder="ملاحظات الطلب (اختياري)"></textarea>
+                </div>
                 <div class="payment-methods">
                     <h3>طريقة الدفع</h3>
                     <label><input type="radio" name="payment" value="بطاقة ائتمان" required> بطاقة ائتمان</label>
@@ -468,47 +475,31 @@
         const name = sanitizeInput(document.getElementById('name').value.trim());
         const email = sanitizeInput(document.getElementById('email').value.trim());
         const phone = sanitizeInput(document.getElementById('phone').value.trim());
+        const notes = sanitizeInput(document.getElementById('notes').value.trim()) || 'غير محدد';
         const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
         if (!name || !email || !phone || !/^[0-9]{8,15}$/.test(phone)) {
-            return; // لا رسائل، بس ما يكمل التنفيذ
+            return;
         }
         if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-            return; // لا رسائل، بس ما يكمل التنفيذ
+            return;
         }
 
         const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
         const purchaseDate = new Date().toLocaleString('ar', { timeZone: 'Asia/Muscat' });
-        const orderNotes = localStorage.getItem('orderNotes') || 'لا توجد ملاحظات';
 
-        let message = `📦 *طلب جديد من tkchop.om* 📦\n\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-        message += `👤 *معلومات العميل*\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-        message += `- *الاسم*: ${name}\n`;
-        message += `- *البريد الإلكتروني*: ${email}\n`;
-        message += `- *رقم الهاتف*: ${phone}\n\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-        message += `💳 *تفاصيل الدفع*\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-        message += `- *طريقة الدفع*: ${paymentMethod}\n`;
-        message += `- *تاريخ الشراء*: ${purchaseDate}\n\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-        message += `🛒 *المنتجات المطلوبة*\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-        selectedItems.forEach((item, index) => {
-            message += `${index + 1}. ${sanitizeInput(item.name)}\n`;
-            message += `   - السعر: ${item.price} ر.ع\n`;
-            message += `   - الكمية: ${item.quantity}\n`;
-            message += `   - الإجمالي: ${(item.price * item.quantity).toFixed(2)} ر.ع\n`;
+        let message = `🛍️ *طلب جديد - tkchop.om* 🛍️\n\n`;
+        message += `👤 *العميل*: ${name}\n`;
+        message += `📧 *الإيميل*: ${email}\n`;
+        message += `📱 *الهاتف*: ${phone}\n`;
+        message += `💳 *الدفع*: ${paymentMethod}\n`;
+        message += `📅 *التاريخ*: ${purchaseDate}\n`;
+        message += `📝 *ملاحظات*: ${notes}\n\n`;
+        message += `🛒 *المنتجات*:\n`;
+        selectedItems.forEach(item => {
+            message += `- ${sanitizeInput(item.name)} (${item.quantity} × ${item.price} ر.ع)\n`;
         });
-        message += `\n━━━━━━━━━━━━━━━━━━━━━━\n`;
-        message += `📝 *ملاحظات الطلب*\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-        message += `${sanitizeInput(orderNotes)}\n\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-        message += `💰 *السعر الإجمالي*: ${totalPrice} ر.ع\n`;
-        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `\n💰 *الإجمالي*: ${totalPrice} ر.ع`;
 
         const whatsappUrl = `https://wa.me/96879470467?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
@@ -529,4 +520,4 @@
     }
 </script>
 </body>
-</html
+</html>
