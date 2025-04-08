@@ -13,30 +13,28 @@
             background: linear-gradient(to bottom, #4B0082, #1C2526);
             color: #FFFFFF;
             direction: rtl;
-            animation: fadeIn 1s ease-in-out;
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+            overflow-x: hidden;
         }
         .container {
             max-width: 1000px;
             margin: 0 auto;
             background: #FFFFFF;
             padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             border-top: 5px solid #6A0DAD;
             color: #1a2b3c;
-            animation: popIn 0.5s ease-in-out;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
-        @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         h1 {
             text-align: center;
-            color: #1a2b3c;
+            color: #6A0DAD;
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 30px;
@@ -44,21 +42,22 @@
         }
         .order-summary {
             border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 20px;
             background: #fafafa;
             margin-bottom: 30px;
         }
         .order-summary h2 {
             font-size: 24px;
-            color: #1a2b3c;
+            color: #6A0DAD;
             margin: 0 0 15px;
             font-weight: 700;
         }
         #order-details {
             border: 1px solid #e0e0e0;
-            border-radius: 5px;
+            border-radius: 8px;
             overflow-x: auto;
+            background: #FFFFFF;
         }
         #order-table {
             width: 100%;
@@ -72,23 +71,25 @@
             border-bottom: 1px solid #e0e0e0;
         }
         #order-table th {
-            background: #f5f6f5;
+            background: #6A0DAD;
+            color: #FFFFFF;
             font-weight: 700;
         }
         #order-table td img {
-            width: 50px;
-            height: 50px;
-            border-radius: 6px;
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
             vertical-align: middle;
             margin-left: 10px;
         }
         .summary-details {
             margin-top: 20px;
-            font-size: 16px;
+            font-size: 18px;
             color: #1a2b3c;
             background: #f5f6f5;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-weight: 700;
         }
         .summary-details p {
             margin: 8px 0;
@@ -97,27 +98,27 @@
         }
         .summary-details span {
             color: #FF69B4;
-            font-weight: 600;
         }
         .notes-display {
             margin-top: 20px;
-            padding: 10px;
+            padding: 15px;
             background: #f5f6f5;
-            border-radius: 5px;
+            border-radius: 8px;
         }
         .notes-display h3 {
             font-size: 18px;
             margin-bottom: 10px;
+            color: #6A0DAD;
         }
         .checkout-form {
-            background: #fff;
+            background: #FFFFFF;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 1px solid #e0e0e0;
         }
         .checkout-form h2 {
             font-size: 24px;
-            color: #1a2b3c;
+            color: #6A0DAD;
             margin: 0 0 15px;
             font-weight: 700;
         }
@@ -130,9 +131,10 @@
             width: 100%;
             padding: 12px 12px 12px 40px;
             border: 1px solid #6A0DAD;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
             transition: border-color 0.3s, box-shadow 0.3s;
+            background: #fafafa;
         }
         .form-group textarea {
             height: 100px;
@@ -140,7 +142,7 @@
         }
         .form-group input:focus, .form-group textarea:focus {
             border-color: #5A0A9A;
-            box-shadow: 0 0 5px rgba(90, 10, 154, 0.3);
+            box-shadow: 0 0 8px rgba(90, 10, 154, 0.3);
             outline: none;
         }
         .form-group::before {
@@ -167,7 +169,7 @@
         }
         .payment-methods h3 {
             font-size: 18px;
-            color: #1a2b3c;
+            color: #6A0DAD;
             margin-bottom: 10px;
         }
         .payment-methods label {
@@ -175,6 +177,11 @@
             margin: 10px 0;
             font-size: 16px;
             color: #1a2b3c;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .payment-methods label:hover {
+            color: #FF69B4;
         }
         .payment-methods input[type="radio"] {
             margin-left: 10px;
@@ -193,8 +200,10 @@
             color: #6A0DAD;
             text-decoration: none;
             cursor: pointer;
+            transition: color 0.3s;
         }
         #terms a:hover {
+            color: #FF69B4;
             text-decoration: underline;
         }
         button {
@@ -202,12 +211,11 @@
             color: #FFFFFF;
             padding: 15px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 18px;
             width: 100%;
             transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
-            animation: pulse 2s infinite;
         }
         button:hover {
             background: #5A0A9A;
@@ -217,6 +225,7 @@
         button:disabled {
             background: #90a4ae;
             cursor: not-allowed;
+            transform: none;
         }
         .back-btn {
             background: #546e7a;
@@ -225,13 +234,6 @@
         .back-btn:hover {
             background: #455a64;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        /* تنسيق النافذة المنبثقة للشروط والأحكام */
         #terms-modal {
             display: none;
             position: fixed;
@@ -241,7 +243,12 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
             z-index: 1000;
-            animation: fadeIn 0.5s ease-in-out;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #terms-modal.active {
+            display: block;
+            opacity: 1;
         }
         #terms-modal > div {
             background: #FFFFFF;
@@ -249,19 +256,23 @@
             max-width: 600px;
             margin: 50px auto;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             position: relative;
             border-top: 5px solid #6A0DAD;
             transform: scale(0.8);
-            animation: popIn 0.3s ease-in-out forwards;
+            transition: transform 0.3s ease;
             color: #1a2b3c;
+        }
+        #terms-modal.active > div {
+            transform: scale(1);
         }
         #terms-modal h2 {
             margin: 0 0 20px;
             font-size: 24px;
             font-weight: 700;
             text-align: center;
+            color: #6A0DAD;
         }
         #terms-modal .close-btn {
             position: absolute;
@@ -278,9 +289,9 @@
         #terms-modal .terms-content {
             max-height: 400px;
             overflow-y: auto;
-            padding: 10px;
+            padding: 15px;
             border: 1px solid #e0e0e0;
-            border-radius: 5px;
+            border-radius: 8px;
             background: #fafafa;
             font-size: 14px;
             line-height: 1.6;
@@ -288,6 +299,7 @@
         #terms-modal .terms-content h3 {
             font-size: 18px;
             margin: 15px 0 10px;
+            color: #6A0DAD;
         }
         #terms-modal .terms-content p {
             margin: 10px 0;
@@ -298,6 +310,12 @@
         }
         #terms-modal .terms-content li {
             margin: 5px 0;
+        }
+        .error-message {
+            text-align: center;
+            font-size: 18px;
+            color: #FF69B4;
+            padding: 20px;
         }
     </style>
 </head>
@@ -337,13 +355,13 @@
                     <input type="email" id="email" placeholder="البريد الإلكتروني" required>
                 </div>
                 <div class="form-group phone">
-                    <input type="tel" id="phone" placeholder="رقم الهاتف" required>
+                    <input type="tel" id="phone" placeholder="رقم الهاتف" required pattern="[0-9]{8,15}">
                 </div>
                 <div class="payment-methods">
                     <h3>طريقة الدفع</h3>
-                    <label><input type="radio" name="payment" value="credit-card" required> بطاقة ائتمان</label>
-                    <label><input type="radio" name="payment" value="apple-pay"> Apple Pay</label>
-                    <label><input type="radio" name="payment" value="google-pay"> Google Pay</label>
+                    <label><input type="radio" name="payment" value="بطاقة ائتمان" required> بطاقة ائتمان</label>
+                    <label><input type="radio" name="payment" value="Apple Pay"> Apple Pay</label>
+                    <label><input type="radio" name="payment" value="Google Pay"> Google Pay</label>
                 </div>
                 <div id="terms">
                     <input type="checkbox" id="agree-terms">
@@ -355,7 +373,6 @@
         </div>
     </div>
 
-    <!-- نافذة الشروط والأحكام -->
     <div id="terms-modal">
         <div>
             <span class="close-btn" onclick="closeTermsModal()">✖</span>
@@ -363,7 +380,6 @@
             <div class="terms-content">
                 <h3>1. مقدمة</h3>
                 <p>مرحبًا بكم في موقع tkchop.om. نحن متجر إلكتروني متخصص في بيع المنتجات الرقمية مثل الألعاب الإلكترونية والبرامج. باستخدام هذا الموقع، فإنك توافق على الالتزام بالشروط والأحكام التالية. يرجى قراءتها بعناية قبل إتمام أي عملية شراء.</p>
-
                 <h3>2. شروط الشراء</h3>
                 <p>جميع المنتجات المعروضة على الموقع هي منتجات رقمية (مثل الألعاب الإلكترونية أو البرامج) ويتم تسليمها عبر البريد الإلكتروني أو رابط تحميل بعد إتمام الدفع بنجاح.</p>
                 <ul>
@@ -371,11 +387,9 @@
                     <li>الأسعار المعروضة هي الأسعار النهائية ولا تشمل أي ضرائب إضافية أو رسوم شحن لأن المنتجات رقمية.</li>
                     <li>الدفع يتم عبر الطرق المتاحة (بطاقة ائتمان، Apple Pay، Google Pay).</li>
                 </ul>
-
                 <h3>3. تسليم المنتجات الرقمية</h3>
                 <p>بعد إتمام الدفع بنجاح، سيتم إرسال رابط التحميل أو مفتاح التنشيط إلى البريد الإلكتروني المقدم خلال 24 ساعة. يرجى التحقق من مجلد الرسائل غير المرغوب فيها (Spam) إذا لم تتلق الرسالة.</p>
                 <p>نحن غير مسؤولين عن أي تأخير ناتج عن إدخال بريد إلكتروني غير صحيح من قبل العميل.</p>
-
                 <h3>4. سياسة الإرجاع والاسترداد</h3>
                 <p>نظرًا لطبيعة المنتجات الرقمية، لا يمكن إرجاع المنتجات أو استرداد قيمتها بعد إرسال مفتاح التنشيط أو رابط التحميل، إلا في الحالات التالية:</p>
                 <ul>
@@ -383,16 +397,12 @@
                     <li>إذا لم يتم تسليم المنتج خلال 48 ساعة من الدفع.</li>
                 </ul>
                 <p>في هذه الحالات، يرجى التواصل معنا خلال 7 أيام من تاريخ الشراء لتقديم طلب استرداد.</p>
-
                 <h3>5. التراخيص والاستخدام</h3>
                 <p>جميع المنتجات الرقمية المباعة تخضع لشروط الترخيص الخاصة بالمطور أو الناشر. بمجرد شراء المنتج، فإنك توافق على استخدامه وفقًا لشروط الترخيص هذه. لا يُسمح بإعادة بيع أو توزيع مفاتيح التنشيط أو المنتجات الرقمية دون إذن مسبق.</p>
-
                 <h3>6. الخصوصية</h3>
                 <p>نحن ملتزمون بحماية بياناتك الشخصية. لن يتم مشاركة معلوماتك مع أي طرف ثالث دون موافقتك، باستثناء ما هو ضروري لإتمام عملية الشراء وتسليم المنتج الرقمي.</p>
-
                 <h3>7. التعديلات على الشروط</h3>
                 <p>نحتفظ بالحق في تعديل هذه الشروط والأحكام في أي وقت. سيتم تطبيق النسخة المحدثة على جميع الطلبات المقدمة بعد التعديل.</p>
-
                 <h3>8. التواصل</h3>
                 <p>إذا كان لديك أي استفسار حول هذه الشروط، يمكنك التواصل معنا عبر الواتساب على الرقم: 96879470467.</p>
             </div>
@@ -401,35 +411,52 @@
 
 <script>
     const selectedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
-    
+
+    window.onload = function() {
+        console.log('Selected Items:', selectedItems);
+        displayOrderDetails();
+        document.querySelector('.container').classList.add('visible');
+    };
+
+    function sanitizeInput(input) {
+        return input.replace(/[<>&"'']/g, '');
+    }
+
     function displayOrderDetails() {
         const orderBody = document.getElementById('order-table-body');
+        const totalAmountElement = document.getElementById('total-amount');
         orderBody.innerHTML = '';
+
+        if (!selectedItems || selectedItems.length === 0) {
+            orderBody.innerHTML = '<tr><td colspan="4" class="error-message">لا توجد منتجات في السلة. يرجى العودة إلى الصفحة الرئيسية وإضافة منتجات.</td></tr>';
+            totalAmountElement.innerText = '0';
+            console.log('No items found in selectedItems');
+            return;
+        }
+
         selectedItems.forEach(item => {
             const totalItemPrice = (item.price * item.quantity).toFixed(2);
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><img src="${item.image}" alt="${item.name}"> ${item.name}</td>
+                <td><img src="${sanitizeInput(item.image)}" alt="${sanitizeInput(item.name)}"> ${sanitizeInput(item.name)}</td>
                 <td>${item.price} ر.ع</td>
                 <td>${item.quantity}</td>
                 <td>${totalItemPrice} ر.ع</td>
             `;
             orderBody.appendChild(row);
         });
-        
         updateSummary();
+
+        const orderNotes = localStorage.getItem('orderNotes');
+        if (orderNotes) {
+            document.getElementById('order-notes-section').style.display = 'block';
+            document.getElementById('order-notes').innerText = sanitizeInput(orderNotes);
+        }
     }
 
     function updateSummary() {
         const total = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
         document.getElementById('total-amount').innerText = total.toFixed(2);
-    }
-
-    // عرض ملاحظات الطلب إذا وجدت
-    const orderNotes = localStorage.getItem('orderNotes');
-    if (orderNotes) {
-        document.getElementById('order-notes-section').style.display = 'block';
-        document.getElementById('order-notes').innerText = orderNotes;
     }
 
     document.getElementById('agree-terms').addEventListener('change', function() {
@@ -438,53 +465,68 @@
 
     document.getElementById('checkout-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const phone = document.getElementById('phone').value;
+        const name = sanitizeInput(document.getElementById('name').value.trim());
+        const email = sanitizeInput(document.getElementById('email').value.trim());
+        const phone = sanitizeInput(document.getElementById('phone').value.trim());
         const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-        
-        if (!name || !email || !phone) {
-            alert('يرجى تعبئة جميع الحقول.');
-            return;
+
+        if (!name || !email || !phone || !/^[0-9]{8,15}$/.test(phone)) {
+            return; // لا رسائل، بس ما يكمل التنفيذ
         }
-        
-        const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+            return; // لا رسائل، بس ما يكمل التنفيذ
+        }
+
+        const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
         const purchaseDate = new Date().toLocaleString('ar', { timeZone: 'Asia/Muscat' });
-        
-        let message = `🛒 *طلب جديد من tkchop.om* 🛒\n\n`;
-        message += `👤 *الاسم*: ${name}\n`;
-        message += `📧 *البريد الإلكتروني*: ${email}\n`;
-        message += `📞 *رقم الهاتف*: ${phone}\n`;
-        message += `💳 *طريقة الدفع*: ${paymentMethod}\n`;
-        message += `📅 *تاريخ الشراء*: ${purchaseDate}\n`;
-        if (orderNotes) {
-            message += `📝 *ملاحظات الطلب*: ${orderNotes}\n`;
-        }
-        message += `\n🛍️ *المنتجات*:\n`;
-        selectedItems.forEach(item => {
-            message += `- ${item.name}: ${item.price} ر.ع × ${item.quantity} = ${(item.price * item.quantity).toFixed(2)} ر.ع\n`;
+        const orderNotes = localStorage.getItem('orderNotes') || 'لا توجد ملاحظات';
+
+        let message = `📦 *طلب جديد من tkchop.om* 📦\n\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `👤 *معلومات العميل*\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `- *الاسم*: ${name}\n`;
+        message += `- *البريد الإلكتروني*: ${email}\n`;
+        message += `- *رقم الهاتف*: ${phone}\n\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `💳 *تفاصيل الدفع*\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `- *طريقة الدفع*: ${paymentMethod}\n`;
+        message += `- *تاريخ الشراء*: ${purchaseDate}\n\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `🛒 *المنتجات المطلوبة*\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        selectedItems.forEach((item, index) => {
+            message += `${index + 1}. ${sanitizeInput(item.name)}\n`;
+            message += `   - السعر: ${item.price} ر.ع\n`;
+            message += `   - الكمية: ${item.quantity}\n`;
+            message += `   - الإجمالي: ${(item.price * item.quantity).toFixed(2)} ر.ع\n`;
         });
-        message += `\n📊 *السعر الإجمالي*: ${totalPrice.toFixed(2)} ر.ع\n`;
-        
+        message += `\n━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `📝 *ملاحظات الطلب*\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `${sanitizeInput(orderNotes)}\n\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+        message += `💰 *السعر الإجمالي*: ${totalPrice} ر.ع\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+
         const whatsappUrl = `https://wa.me/96879470467?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
-        
+
         localStorage.removeItem('selectedItems');
         localStorage.removeItem('orderNotes');
-        alert('تم إرسال طلبك بنجاح! سيتم التواصل معك قريبًا لإرسال المنتجات الرقمية إلى بريدك الإلكتروني.');
         window.close();
     });
 
-    // دوال لفتح وإغلاق نافذة الشروط والأحكام
     function openTermsModal() {
-        document.getElementById('terms-modal').style.display = 'block';
+        const modal = document.getElementById('terms-modal');
+        modal.classList.add('active');
     }
 
     function closeTermsModal() {
-        document.getElementById('terms-modal').style.display = 'none';
+        const modal = document.getElementById('terms-modal');
+        modal.classList.remove('active');
     }
-
-    displayOrderDetails();
 </script>
 </body>
-</html>
+</html
